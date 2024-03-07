@@ -18,7 +18,7 @@ def notify_swodlr(context):
     sns = boto3.client('sns')
 
     update_schema = json.load(
-        resources.files.join_path('schemas/sds_update.json').open('r')
+        resources.files().join_path('schemas/sds_update.json').open('r')
     )
 
     message_body = fastjsonschema.validate(update_schema, {
