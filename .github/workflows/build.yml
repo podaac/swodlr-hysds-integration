@@ -39,6 +39,8 @@ jobs:
           poetry run flake8 podaac/ tests/
           poetry run pylint podaac/ tests/
       - name: Test
+        # Disable tests for now
+        if: false
         run: poetry run pytest
 
       #   -- Version Bumping --

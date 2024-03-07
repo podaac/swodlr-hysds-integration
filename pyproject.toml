@@ -21,6 +21,7 @@ fastjsonschema = "^2.19.1"
 pylint = "^3.1.0"
 flake8 = "^7.0.0"
 bumpver = "^2023.1129"
+pytest = "^8.0.2"
 
 [tool.poetry.scripts]
 notify_swodlr = 'podaac.swodlr_hysds.notify_swodlr:main'
