@@ -58,11 +58,11 @@ jobs:
       - name: Bump rc version
         if: startsWith(github.ref, 'refs/heads/release/') && github.event_name != 'workflow_dispatch'
         run: |
-          bumpver --tag rc --tag-num
+          bumpver update --tag rc --tag-num
           echo "TARGET_ENV=UAT" >> $GITHUB_ENV
       - name: Release version
         if: github.ref == 'refs/heads/main' && github.event_name != 'workflow_dispatch'
-        run: bumpver --tag final
+        run: bumpver update --tag final
 
       #   -- Build --
       - name: Build
