@@ -18,6 +18,7 @@ def notify_swodlr(context):
     sns = boto3.client('sns')
 
     update_schema = json.load(
+        # pylint: disable-next=E1120
         resources.files().join_path('schemas/sds_update.json').open('r')
     )
 
