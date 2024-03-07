@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "swodlr-hysds-integration"
-version = "0.0.2"
+version = "0.0.3"
 description = "SWODLR user rules for integration with SWODLR SDS deployments"
 authors = ["podaac-tva <podaac-tva@jpl.nasa.gov>"]
 license = "Apache-2.0"
