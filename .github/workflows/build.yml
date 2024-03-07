@@ -67,5 +67,8 @@ jobs:
       #   -- Build --
       - name: Build
         run: scripts/build.sh
+      - name: Tag as latest
+        if: github.ref == 'refs/heads/main' && github.event_name != 'workflow_dispatch'
+        run: docker tag ghcr.io/podaac/swodlr-hysds-integration ghcr.io/podaac/swodlr-hysds-integration:latest
       - name: Publish Docker images
-        run: docker image push -a ghcr.io/podaac/swodlr-api
+        run: docker image push -a ghcr.io/podaac/swodlr-hysds-integration
