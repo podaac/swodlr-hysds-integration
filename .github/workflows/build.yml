@@ -1,0 +1,69 @@
+name: Build
+
+on: 
+  push:
+    branches:
+      - '*'
+    tags-ignore:
+      - '*'
+    paths-ignore:
+      - 'pyproject.toml'
+      - 'bumpver.toml'
+
+jobs:
+  build:
+    name: build, lint, and test hysds-integration
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/login-action@v3.0.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install poetry
+        run: pip3 install poetry
+      - name: Install dependencies
+        run: poetry install
+      - name: Setup git user
+        run: |
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+
+      #   -- Testing & Linting --
+      - name: Lint
+        run: |
+          poetry run flake8 podaac/ tests/
+          poetry run pylint podaac/ tests/
+      - name: Test
+        run: poetry run pytest
+
+      #   -- Version Bumping --
+      - name: Bump alpha version
+        if: github.ref == 'refs/heads/develop' && github.event_name != 'workflow_dispatch'
+        run: |
+          TAG=$(bumpver show -e | awk -F= '$1 == "TAG" {print $2};')
+          if [ $TAG == 'final' ]; then
+            # Bump patch version first then append tag
+            bumpver update --patch --tag alpha --tag-num
+          else
+            bumpver update --tag alpha --tag-num
+          fi
+          echo "TARGET_ENV=SIT" >> $GITHUB_ENV
+      - name: Bump rc version
+        if: startsWith(github.ref, 'refs/heads/release/') && github.event_name != 'workflow_dispatch'
+        run: |
+          bumpver --tag rc --tag-num
+          echo "TARGET_ENV=UAT" >> $GITHUB_ENV
+      - name: Release version
+        if: github.ref == 'refs/heads/main' && github.event_name != 'workflow_dispatch'
+        run: bumpver --tag final
+
+      #   -- Build --
+      - name: Build
+        run: scripts/build.sh
+      - name: Publish Docker images
+        run: docker image push ghcr.io/podaac/swodlr-api

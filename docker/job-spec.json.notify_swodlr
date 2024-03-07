@@ -1,0 +1,27 @@
+{
+  "command": "notify_swodlr",
+  "disk_usage": "5MB",
+  "soft_time_limit": 120,
+  "time_limit": 150,
+  "recommended_queues": ["system-jobs-queue"],
+  "disable_pre_builtins": true,
+  "disable_post_builtins": true,
+  "imported_worker_files": {
+    "$HOME/.aws": "/root/.aws:ro",
+    "$HOME/.swodlr": "/root/.swodlr:ro"
+  },
+  "params": [
+    {
+      "name": "job_id",
+      "destination": "context"
+    },
+    {
+      "name": "status",
+      "destination": "context"
+    },
+    {
+      "name": "products_staged",
+      "destination": "context"
+    }
+  ]
+}

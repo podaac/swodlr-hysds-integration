@@ -1,0 +1,17 @@
+{
+  "label": "Notify SWODLR",
+  "params": [
+    {
+      "name": "job_id",
+      "from": "dataset_jpath:_source.payload_id"
+    },
+    {
+      "name": "status",
+      "from": "dataset_jpath:_source.status"
+    },
+    {
+      "name": "products_staged",
+      "from": "dataset_jpath:_source.job.job_info.metrics.products_staged"
+    }
+  ]
+}
